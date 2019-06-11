@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/banbanpeppa/huobi-open-api-go/websocket"
+	"github.com/banbanpeppa/huobi-open-api-go/v1/websocket"
 )
 
 func TestFutureTicker(t *testing.T) {

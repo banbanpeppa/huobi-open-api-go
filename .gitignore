@@ -1,3 +1,4 @@
 vendor/
 main/
-glide.lock
+ws-js-client/node_modules/
+ws-js-client/package-lock.json

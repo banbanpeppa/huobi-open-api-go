@@ -1,0 +1,18 @@
+hash: 9c838b0acfa1f37822b9d278e63b77f443e149805817d2e85035f09b14de9566
+updated: 2019-06-10T13:42:58.068752+08:00
+imports:
+- name: github.com/dgrijalva/jwt-go
+  version: 06ea1031745cb8b3dab3f6a236daf2b0aa468b7e
+- name: github.com/golang/net
+  version: 461777fb6f67e8cb9d70cda16573678d085a74cf
+  subpackages:
+  - websocket
+- name: github.com/gorilla/websocket
+  version: 80c2d40e9b91f2ef7a9c1a403aeec64d1b89a9a6
+- name: github.com/spf13/cast
+  version: c01685bb8421cecb276fa517e91f757215f980b3
+testImports:
+- name: github.com/stretchr/testify
+  version: f35b8ab0b5a2cef36673838d662e249dd9c94686
+  subpackages:
+  - assert

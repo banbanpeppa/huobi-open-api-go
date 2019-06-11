@@ -1,6 +1,6 @@
 const WebSocket = require('ws')
 
-ws = new WebSocket('ws://47.75.66.40:5001/ws' + "/huobi");
+ws = new WebSocket('ws://47.75.66.40:5001/ws' + "/okex");
 ws.onopen = evt => {
     console.info("connection");
     // console.info(evt);
@@ -8,13 +8,12 @@ ws.onopen = evt => {
 ws.onmessage = evt => {
 let json = JSON.parse(evt.data);
 // console.info(json)
-if(json.channel=="okex-okex"){
-    //console.info(json.data)
-}else if(json.channel =="okex-bfx"){
-    //console.info(json.data)
+if(json.channel=="OKEX-HUOBI"){
+    console.info(json.data)
+}else if(json.channel =="HUOBI-HUOBI"){
+    console.info(json.data)
 } else if (json.channel == "HUOBI-BFX") {
-    console.info(json.data);
-    console.info("-------------end-------------");
+    //console.info(json.data);
 }
 };
 ws.onclose = evt => {
