@@ -26,26 +26,6 @@ type Request struct {
 	Sub string `json:"sub"`
 }
 
-type Data struct {
-	// Amount int `json:"amount"`
-	Ts int `json:"ts"`
-	// Id        uint64  `json:"id"`
-	Price     float64 `json:"price"`
-	Direction string  `json:"direction"`
-}
-
-type Tick struct {
-	Id   int    `json:"id"`
-	Ts   int    `json:"ts"`
-	Data []Data `json:"data"`
-}
-
-type TradeDetail struct {
-	Ts   int    `json:"ts"`
-	Ch   string `json:"ch"`
-	Tick Tick   `json:"tick"`
-}
-
 type Client struct {
 	Name     string
 	Params   *ClientParameters
@@ -103,7 +83,7 @@ func (cli *Client) Subscribe(requests []Request) {
 	initMoniter()
 	go cli.sub(requests)
 	// time.Sleep(20 * time.Millisecond)
-	// cli.reCreateClient()
+	cli.reCreateClient()
 }
 
 func (cli *Client) Listen() <-chan interface{} {
@@ -112,8 +92,8 @@ func (cli *Client) Listen() <-chan interface{} {
 
 func (cli *Client) reCreateClient() {
 	go func() {
-		time.Sleep(time.Second * 20)
-		checkTicker := time.NewTicker(time.Second * 10)
+		time.Sleep(cli.Params.ReconnectTimeout)
+		checkTicker := time.NewTicker(cli.Params.CheckTickerTimeout)
 		for {
 			select {
 			case <-checkTicker.C:
@@ -133,8 +113,8 @@ func (cli *Client) sub(reqs []Request) {
 		addrs := []string{string(cli.Params.LocalIP)}
 		localAddr := &net.TCPAddr{IP: net.ParseIP(addrs[rand.Int()%len(addrs)]), Port: 0}
 		d := net.Dialer{
-			Timeout:   30 * time.Second,
-			KeepAlive: 30 * time.Second,
+			Timeout:   cli.Params.WSDialerTimeout,
+			KeepAlive: cli.Params.WSDialerKeepAlive,
 			LocalAddr: localAddr,
 			DualStack: true,
 		}
@@ -166,7 +146,7 @@ func (cli *Client) sub(reqs []Request) {
 	}
 
 	go func() {
-		pangTicker := time.NewTicker(time.Second * 3)
+		pangTicker := time.NewTicker(cli.Params.PangTickerTimeout)
 		for {
 			select {
 			case <-pangTicker.C:
@@ -194,6 +174,7 @@ func (cli *Client) sub(reqs []Request) {
 		}
 
 		cli.handleMessage(msg)
+		time.Sleep(cli.Params.WSMessageTimeout)
 	}
 }
 

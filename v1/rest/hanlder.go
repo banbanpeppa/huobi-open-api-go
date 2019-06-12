@@ -1,9 +1,5 @@
 package rest
 
-import (
-	"github.com/banbanpeppa/huobi-open-api-go/utils"
-)
-
 const (
 	HTTP_OK    = "ok"
 	HTTP_ERROR = "error"
@@ -17,16 +13,16 @@ type Error struct {
 }
 
 type Handler struct {
-	Params   *utils.ApiParameter
+	Params   *ApiParameter
 	listener chan interface{}
 }
 
 func NewDefaultRestHandler() *Handler {
-	apiParams := utils.CreateDefaultApiParameter()
+	apiParams := CreateDefaultApiParameter()
 	return &Handler{Params: apiParams, listener: make(chan interface{})}
 }
 
-func NewRestHandler(apiParams *utils.ApiParameter) *Handler {
+func NewRestHandler(apiParams *ApiParameter) *Handler {
 	return &Handler{Params: apiParams, listener: make(chan interface{})}
 }
 

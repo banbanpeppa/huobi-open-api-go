@@ -1,4 +1,4 @@
-package utils
+package rest
 
 import (
 	"crypto/hmac"
@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/banbanpeppa/huobi-open-api-go/utils"
 )
 
 type ApiParameter struct {
@@ -236,7 +238,7 @@ func ApiKeyGet(mapParams map[string]string, strRequestPath string, params *ApiPa
 }
 
 func CreatePrivateSignByJWT(sign string, PrivateKeyPrime256 string) (string, error) {
-	return SignByJWT(PrivateKeyPrime256, sign)
+	return utils.SignByJWT(PrivateKeyPrime256, sign)
 }
 
 // 将map格式的请求参数转换为字符串格式的,并按照Map的key升序排列

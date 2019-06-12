@@ -6,7 +6,7 @@ An implementation of [Huobi-API](https://huobiapi.github.io/docs/spot/v1/cn/).
 
 ## Installation
 ```
-go get github.com/banbanpeppa/huobi-future-go
+go get github.com/banbanpeppa/huobi-open-api-go
 ```
 
 ## Usage

@@ -12,6 +12,7 @@ import (
 func TestFutureTicker(t *testing.T) {
 	p := websocket.NewDefaultParameters()
 	huobiClient := websocket.NewHuobiWSClient(p) //WS运行太久，外部原因可能断开，支持自动重连
+	// p.WSMessageTimeout = time.Second * 1
 
 	requests := []websocket.Request{}
 	for _, ticker := range TICKER_ALL {
