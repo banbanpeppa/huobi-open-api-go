@@ -81,35 +81,38 @@ func NewHuobiWSClient(params *ClientParameters) *Client {
 
 func (cli *Client) Subscribe(requests []Request) {
 	initMoniter()
-	go cli.sub(requests)
-	// time.Sleep(20 * time.Millisecond)
-	cli.reCreateClient()
+	go cli.subscribe(requests)
+	if cli.Params.ReConnect {
+		cli.reCreateClient(requests)
+	}
 }
 
 func (cli *Client) Listen() <-chan interface{} {
 	return cli.listener
 }
 
-func (cli *Client) reCreateClient() {
+func (cli *Client) reCreateClient(requests []Request) {
 	go func() {
-		time.Sleep(cli.Params.ReconnectTimeout)
-		checkTicker := time.NewTicker(cli.Params.CheckTickerTimeout)
+		// time.Sleep(time.Second * 10)
+		checkTicker := time.NewTicker(cli.Params.ReconnectTimeout)
 		for {
 			select {
 			case <-checkTicker.C:
 				if mon.clientNum <= 0 {
-					NewHuobiWSClient(cli.Params)
+					log.Println("reconnect to ws server: ", cli.Params.URL)
+					clientNameNum++
+					cli.Name = cast.ToString(clientNameNum)
+					go cli.subscribe(requests)
 				}
 			}
 		}
 	}()
 }
 
-func (cli *Client) sub(reqs []Request) {
+func (cli *Client) subscribe(reqs []Request) {
 	AddClientNum()
 	dialer := websocket.DefaultDialer
 	dialer.NetDial = func(network, addr string) (net.Conn, error) {
-
 		addrs := []string{string(cli.Params.LocalIP)}
 		localAddr := &net.TCPAddr{IP: net.ParseIP(addrs[rand.Int()%len(addrs)]), Port: 0}
 		d := net.Dialer{
@@ -122,15 +125,18 @@ func (cli *Client) sub(reqs []Request) {
 		return c, err
 	}
 	c, _, err := dialer.Dial(cli.Params.URL, nil)
+
 	if err != nil {
-		log.Println("Dial Erro:", err)
+		log.Println("Dial Erro:", err, ". Cli name:", cli.Name)
 		SubClientNum()
 		return
 	}
 
 	defer func() {
+		log.Println("connection will be closed...")
 		c.Close()
 		SubClientNum()
+		log.Println("goroutine quit..., cli name:", cli.Name)
 	}()
 
 	for _, request := range reqs {
@@ -164,7 +170,6 @@ func (cli *Client) sub(reqs []Request) {
 		_, zipmsg, err := c.ReadMessage()
 		if err != nil {
 			log.Println("Read Error : ", err, cli.Name)
-			defer c.Close()
 			return
 		}
 
