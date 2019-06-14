@@ -22,6 +22,6 @@ func NewDefaultParameters() *ClientParameters {
 		WSDialerTimeout:   time.Second * 5,
 		WSDialerKeepAlive: time.Second * 10,
 		WSMessageTimeout:  time.Millisecond * 100,
-		ReConnect:         false,
+		ReConnect:         true,
 	}
 }

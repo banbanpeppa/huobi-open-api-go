@@ -17,7 +17,7 @@ func TestIndex(t *testing.T) {
 			fmt.Println(index.(string)) //错误信息打印为string
 		case *rest.IndexResponse:
 			ir := index.(*rest.IndexResponse)
-			fmt.Println(ir.Data[0].Symbol+":", ir.Data[0].IndexPrice)
+			fmt.Println(ir.Data[0].Symbol+":", ir.Data[0].IndexPrice, ": ", ir.Ts/1000)
 		case *rest.Error:
 			// jsonStr, _ := json.Marshal(index)
 			// fmt.Println(string(jsonStr))

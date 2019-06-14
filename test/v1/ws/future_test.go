@@ -13,6 +13,7 @@ func TestFutureTicker(t *testing.T) {
 	p := websocket.NewDefaultParameters()
 	huobiClient := websocket.NewHuobiWSClient(p) //WS运行太久，外部原因可能断开，支持自动重连
 	// p.WSMessageTimeout = time.Second * 1
+	p.ReConnect = true
 
 	requests := []websocket.Request{}
 	for _, ticker := range TICKER_ALL {
@@ -31,15 +32,17 @@ func TestFutureTicker(t *testing.T) {
 			abc := obj.(*websocket.TradeDetail)
 			fmt.Println(abc.Tick.Id)
 		case []byte:
-			// fmt.Println(string(obj.([]byte)))
-			tradeDetail := &websocket.TradeDetail{}
-			err := json.Unmarshal(obj.([]byte), &tradeDetail)
-			if err == nil {
-				if len(tradeDetail.Tick.Data) > 0 {
-					price := tradeDetail.Tick.Data[0].Price
-					fmt.Println(tradeDetail.Ch+" ", price)
+			go func() {
+				// fmt.Println(string(obj.([]byte)))
+				tradeDetail := &websocket.TradeDetail{}
+				err := json.Unmarshal(obj.([]byte), &tradeDetail)
+				if err == nil {
+					if len(tradeDetail.Tick.Data) > 0 {
+						price := tradeDetail.Tick.Data[0].Price
+						fmt.Println(tradeDetail.Ch+" ", price)
+					}
 				}
-			}
+			}()
 		}
 	}
 }

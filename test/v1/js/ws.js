@@ -1,6 +1,6 @@
 const WebSocket = require('ws')
 
-ws = new WebSocket('ws://47.75.66.40:5002/ws' + "/ihuobi");
+ws = new WebSocket('ws://47.75.66.40:5001/ws' + "/huobi");
 ws.onopen = evt => {
     console.info("connection");
     // console.info(evt);
