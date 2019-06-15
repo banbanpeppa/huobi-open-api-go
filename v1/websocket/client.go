@@ -179,7 +179,9 @@ func (cli *Client) subscribe(reqs []Request) {
 		}
 
 		cli.handleMessage(msg)
-		time.Sleep(cli.Params.WSMessageTimeout)
+		if cli.Params.WSMessageTimeout > 0 {
+			time.Sleep(cli.Params.WSMessageTimeout)
+		}
 	}
 }
 

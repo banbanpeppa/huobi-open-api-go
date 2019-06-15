@@ -1,3 +1,4 @@
 vendor/
 main/
 test/v1/js/node_modules/
+.vscode/

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/banbanpeppa/huobi-open-api-go/v1/websocket"
 )
@@ -37,7 +38,8 @@ func TestFutureTicker(t *testing.T) {
 				tradeDetail := &websocket.TradeDetail{}
 				err := json.Unmarshal(obj.([]byte), &tradeDetail)
 				if err == nil {
-					if len(tradeDetail.Tick.Data) > 0 {
+					now := time.Now().UTC().Unix()
+					if len(tradeDetail.Tick.Data) > 0 && (now-tradeDetail.Tick.Data[0].Ts/1000) < 5 {
 						price := tradeDetail.Tick.Data[0].Price
 						fmt.Println(tradeDetail.Ch+" ", price)
 					}
