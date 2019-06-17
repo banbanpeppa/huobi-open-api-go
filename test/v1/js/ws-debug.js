@@ -7,7 +7,8 @@ ws.onmessage = evt => {
     json.forEach(element => {
         if(element != null) {
             if (element.channel == "HUOBI-HUOBI") {
-                console.info("future_ts: " + element.data.future_ts + " stock_ts:" + element.data.stock_ts)
+                console.info(element.data)
+                // console.info("future_ts: " + element.data.future_ts + " stock_ts:" + element.data.stock_ts)
             } 
         }
     })

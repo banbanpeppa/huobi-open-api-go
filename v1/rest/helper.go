@@ -21,19 +21,28 @@ type ApiParameter struct {
 	HostName           string
 	SecretKey          string
 	EnablePrivateSign  bool
-	TradeUrl           string
-	MarketUrl          string
+	Url                string
 	PrivateKeyPrime256 string
 }
 
-func CreateDefaultApiParameter() *ApiParameter {
+func CreateDefaultFutureApiParameter() *ApiParameter {
 	return &ApiParameter{
 		AccessKey:          "*",
 		HostName:           "*",
 		SecretKey:          "*",
 		EnablePrivateSign:  false,
-		TradeUrl:           "https://api.hbdm.com",
-		MarketUrl:          "https://api.hbdm.com",
+		Url:                "https://api.hbdm.com",
+		PrivateKeyPrime256: "",
+	}
+}
+
+func CreateDefaultStockApiParameter() *ApiParameter {
+	return &ApiParameter{
+		AccessKey:          "*",
+		HostName:           "*",
+		SecretKey:          "*",
+		EnablePrivateSign:  false,
+		Url:                "https://api.huobi.pro",
 		PrivateKeyPrime256: "",
 	}
 }
@@ -232,7 +241,7 @@ func ApiKeyGet(mapParams map[string]string, strRequestPath string, params *ApiPa
 		}
 	}
 
-	strUrl := params.TradeUrl + strRequestPath
+	strUrl := params.Url + strRequestPath
 
 	return HttpGetRequest(strUrl, MapValueEncodeURI(mapParams))
 }
