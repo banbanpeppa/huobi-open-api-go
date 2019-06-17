@@ -52,8 +52,6 @@ for obj := range huobiClient.Listen() {
 ### RESTFul
 ### Basic requests
 ```
-import "github.com/banbanpeppa/huobi-open-api-go/v1/rest"
-
 handler := rest.NewDefaultRestHandler()
 tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
 handler.GetFutureContractIndex(tickers)
