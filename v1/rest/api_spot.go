@@ -9,7 +9,7 @@ import (
 	simplejson "github.com/bitly/go-simplejson"
 )
 
-func (handler *Handler) SubscribeStockTrade(symbols []string) {
+func (handler *Handler) SubscribeSpotTrade(symbols []string) {
 	strRequest := "/market/history/trade"
 	go func() {
 		for {
@@ -23,7 +23,7 @@ func (handler *Handler) SubscribeStockTrade(symbols []string) {
 	}()
 }
 
-func (handler *Handler) SubscribeStockDepth(symbols []string, depth DepthRequestDepth, depthType DepthRequestType) {
+func (handler *Handler) SubscribeSpotDepth(symbols []string, depth DepthRequestDepth, depthType DepthRequestType) {
 	strRequest := "/market/depth"
 	go func() {
 		for {
@@ -41,7 +41,7 @@ func (handler *Handler) SubscribeStockDepth(symbols []string, depth DepthRequest
 	}()
 }
 
-func (handler *Handler) GetStockDepth(symbol string, depth DepthRequestDepth, depthType DepthRequestType) (*DepthResponse, error) {
+func (handler *Handler) GetSpotDepth(symbol string, depth DepthRequestDepth, depthType DepthRequestType) (*DepthResponse, error) {
 	strRequest := "/market/depth"
 	params := make(map[string]string)
 	params["symbol"] = strings.ToLower(symbol) + "usdt"
@@ -72,10 +72,10 @@ func (handler *Handler) GetStockDepth(symbol string, depth DepthRequestDepth, de
 	}
 }
 
-func (handler *Handler) GetStockDepths(symbols []string, depth DepthRequestDepth, depthType DepthRequestType) ([]*DepthResponse, error) {
+func (handler *Handler) GetSpotDepths(symbols []string, depth DepthRequestDepth, depthType DepthRequestType) ([]*DepthResponse, error) {
 	depths := make([]*DepthResponse, 0)
 	for _, symbol := range symbols {
-		depth, err := handler.GetStockDepth(symbol, depth, depthType)
+		depth, err := handler.GetSpotDepth(symbol, depth, depthType)
 		if err != nil {
 			return nil, err
 		} else {

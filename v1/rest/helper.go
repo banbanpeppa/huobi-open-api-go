@@ -36,7 +36,7 @@ func CreateDefaultFutureApiParameter() *ApiParameter {
 	}
 }
 
-func CreateDefaultStockApiParameter() *ApiParameter {
+func CreateDefaultSpotApiParameter() *ApiParameter {
 	return &ApiParameter{
 		AccessKey:          "*",
 		HostName:           "*",

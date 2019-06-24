@@ -30,8 +30,8 @@ func NewDefaultFutureRestHandler() *Handler {
 	return &Handler{Params: apiParams, listener: make(chan interface{})}
 }
 
-func NewDefaultStockRestHandler() *Handler {
-	apiParams := CreateDefaultStockApiParameter()
+func NewDefaultSpotRestHandler() *Handler {
+	apiParams := CreateDefaultSpotApiParameter()
 	return &Handler{Params: apiParams, listener: make(chan interface{})}
 }
 

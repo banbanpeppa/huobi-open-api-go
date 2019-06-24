@@ -14,7 +14,8 @@ import (
 	"github.com/spf13/cast"
 )
 
-/** 订阅websocket的请求格式
+/**
+订阅websocket的请求格式
 {
 	"sub": "market.$symbol.kline.$period",
 	"id": "id generate by client"
