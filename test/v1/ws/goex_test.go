@@ -23,14 +23,17 @@ func TestGoEx(t *testing.T) {
 			log.Println(depth.AskList)
 			log.Println("<<<<<<<<<<<<<<")
 		}, func(trade *goex.Trade, s string) {
-			log.Println(s, trade)
+			now := time.Now().UTC().Unix()
+			if now-trade.Date/1000 < 3 {
+				log.Println(s, trade)
+			}
 		})
 
 		// t.Log(ws.SubscribeTicker(goex.BTC_USD, goex.QUARTER_CONTRACT))
 		// t.Log(ws.SubscribeDepth(goex.BTC_USD, goex.NEXT_WEEK_CONTRACT, 0))
 		ws.SubscribeTrade(goex.LTC_USD, goex.THIS_WEEK_CONTRACT)
-		ws.SubscribeTrade(goex.BTC_USD, goex.THIS_WEEK_CONTRACT)
-		ws.SubscribeTrade(goex.EOS_USD, goex.THIS_WEEK_CONTRACT)
+		ws.SubscribeTrade(goex.LTC_USD, goex.NEXT_WEEK_CONTRACT)
+		ws.SubscribeTrade(goex.LTC_USD, goex.QUARTER_CONTRACT)
 		time.Sleep(3 * time.Second)
 	}
 

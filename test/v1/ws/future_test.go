@@ -16,15 +16,16 @@ func TestFutureTicker(t *testing.T) {
 	// p.WSMessageTimeout = time.Second * 1
 	p.ReConnect = true
 
-	requests := []websocket.Request{}
-	for _, ticker := range TICKER_ALL {
-		req_cw := websocket.Request{Id: "id7", Sub: "market." + ticker + "_CW.trade.detail"}
-		req_nw := websocket.Request{Id: "id7", Sub: "market." + ticker + "_NW.trade.detail"}
-		req_cq := websocket.Request{Id: "id7", Sub: "market." + ticker + "_CQ.trade.detail"}
-		requests = append(requests, req_cw, req_nw, req_cq)
-	}
+	// requests := []websocket.Request{}
+	// for _, ticker := range TICKER_ALL {
+	// 	req_cw := websocket.Request{Id: "id7", Sub: "market." + ticker + "_CW.trade.detail"}
+	// 	req_nw := websocket.Request{Id: "id7", Sub: "market." + ticker + "_NW.trade.detail"}
+	// 	req_cq := websocket.Request{Id: "id7", Sub: "market." + ticker + "_CQ.trade.detail"}
+	// 	requests = append(requests, req_cw, req_nw, req_cq)
+	// }
 
-	huobiClient.Subscribe(requests)
+	// huobiClient.Subscribe(requests)
+	huobiClient.SubscribeFutureMarketTrade(TICKER_ALL)
 	for obj := range huobiClient.Listen() {
 		switch obj.(type) {
 		case string:

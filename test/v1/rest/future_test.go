@@ -12,7 +12,7 @@ import (
 func TestIndex(t *testing.T) {
 	handler := rest.NewDefaultFutureRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	handler.GetFutureContractIndex(tickers)
+	handler.SubscribeFutureContractIndex(tickers)
 	for index := range handler.Listen() {
 		switch index.(type) {
 		case string:
@@ -32,7 +32,7 @@ func TestIndex(t *testing.T) {
 func TestTrade(t *testing.T) {
 	handler := rest.NewDefaultFutureRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	handler.GetFutureMarketTrade(tickers)
+	handler.SubscribeFutureMarketTrade(tickers)
 	for index := range handler.Listen() {
 		switch index.(type) {
 		case []byte:
@@ -61,10 +61,10 @@ func TestTrade(t *testing.T) {
 	}
 }
 
-func TestFutureDepth(t *testing.T) {
+func TestSubscribeFutureDepth(t *testing.T) {
 	handler := rest.NewDefaultFutureRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	handler.GetFutureMarketDepth(tickers, rest.STEP0)
+	handler.SubscribeFutureMarketDepth(tickers, rest.STEP0)
 	for index := range handler.Listen() {
 		switch index.(type) {
 		case *rest.DepthResponse:
@@ -74,5 +74,15 @@ func TestFutureDepth(t *testing.T) {
 			jsonStr, _ := json.Marshal(index)
 			fmt.Println(string(jsonStr))
 		}
+	}
+}
+
+func TestGetFutureDepth(t *testing.T) {
+	handler := rest.NewDefaultFutureRestHandler()
+	depth, err := handler.GetFutureMarketDepth("BTC", rest.CW, rest.STEP0)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(depth)
 	}
 }

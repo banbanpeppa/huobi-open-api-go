@@ -1,7 +1,11 @@
 package rest
 
 import (
+	"encoding/json"
+	"errors"
 	"time"
+
+	simplejson "github.com/bitly/go-simplejson"
 )
 
 /**
@@ -11,7 +15,7 @@ import (
  *            ["BTC","ETH"...]
  * @return
  */
-func (handler *Handler) GetFutureContractIndex(symbols []string) {
+func (handler *Handler) SubscribeFutureContractIndex(symbols []string) {
 	strRequest := "/api/v1/contract_index"
 	go func() {
 		for {
@@ -25,7 +29,7 @@ func (handler *Handler) GetFutureContractIndex(symbols []string) {
 	}()
 }
 
-func (handler *Handler) GetFutureMarketTrade(symbols []string) {
+func (handler *Handler) SubscribeFutureMarketTrade(symbols []string) {
 	strRequest := "/market/trade"
 	suffixs := []string{"_CQ", "_CW", "_NW"}
 	go func() {
@@ -42,7 +46,7 @@ func (handler *Handler) GetFutureMarketTrade(symbols []string) {
 	}()
 }
 
-func (handler *Handler) GetFutureMarketDepth(symbols []string, depthType DepthRequestType) {
+func (handler *Handler) SubscribeFutureMarketDepth(symbols []string, depthType DepthRequestType) {
 	strRequest := "/market/depth"
 	suffixs := []string{"_CQ", "_CW", "_NW"}
 	go func() {
@@ -57,4 +61,32 @@ func (handler *Handler) GetFutureMarketDepth(symbols []string, depthType DepthRe
 			}
 		}
 	}()
+}
+
+func (handler *Handler) GetFutureMarketDepth(symbol string, cycle FutureSymbolType, depthType DepthRequestType) (*DepthResponse, error) {
+	strRequest := "/market/depth"
+	params := make(map[string]string)
+	params["symbol"] = symbol + string(cycle)
+	params["type"] = string(depthType)
+	responsej, err := ApiKeyGet(params, strRequest, handler.Params)
+	if err != nil {
+		return nil, err
+	} else {
+		simJ, err := simplejson.NewJson([]byte(responsej))
+		if err != nil {
+			return nil, err
+		}
+		status := simJ.Get("status").MustString()
+		if status == HTTP_OK {
+			depthRes := DepthResponse{}
+			err = json.Unmarshal([]byte(responsej), &depthRes)
+			if err != nil {
+				return nil, err
+			} else {
+				return &depthRes, nil
+			}
+		} else {
+			return nil, errors.New(responsej)
+		}
+	}
 }

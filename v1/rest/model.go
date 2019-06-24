@@ -29,6 +29,23 @@ const (
 	STEP5 DepthRequestType = "step5"
 )
 
+type DepthRequestDepth int32
+
+const (
+	FIVE    DepthRequestDepth = 5
+	TEN     DepthRequestDepth = 10
+	TWENTY  DepthRequestDepth = 20
+	DEFAULT DepthRequestDepth = 150
+)
+
+type FutureSymbolType string
+
+const (
+	CW FutureSymbolType = "_CW"
+	CQ FutureSymbolType = "_CQ"
+	NW FutureSymbolType = "_NW"
+)
+
 type Tick struct {
 	Bids [][]float64 `json:"bids"`
 	Asks [][]float64 `json:"asks"`

@@ -45,6 +45,36 @@ for obj := range huobiClient.Listen() {
         fmt.Println("other type of obj")
 }
 ```
+也可以通过`api`的形式调用websocket的订阅
+```
+var TICKER_ALL = []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
+p := websocket.NewDefaultParameters()
+huobiClient := websocket.NewHuobiWSClient(p) //WS运行太久，外部原因可能断开，支持自动重连
+
+huobiClient.SubscribeFutureMarketTrade(TICKER_ALL)
+for obj := range huobiClient.Listen() {
+    switch obj.(type) {
+    case string:
+        fmt.Print(obj)
+    case *websocket.TradeDetail:
+        abc := obj.(*websocket.TradeDetail)
+        fmt.Println(abc.Tick.Id)
+    case []byte:
+        go func() {
+            tradeDetail := &websocket.TradeDetail{}
+            err := json.Unmarshal(obj.([]byte), &tradeDetail)
+            if err == nil {
+                now := time.Now().UTC().Unix()
+                if len(tradeDetail.Tick.Data) > 0 && (now-tradeDetail.Tick.Data[0].Ts/1000) < 5 {
+                    price := tradeDetail.Tick.Data[0].Price
+                    fmt.Println(tradeDetail.Ch+" ", price)
+                }
+            }
+        }()
+    }
+}
+```
+
 #### Huobi Websocket API
 
 [合约Websocket 文档](https://github.com/huobiapi/API_Docs/wiki/WS_api_reference_Derivatives)
@@ -52,21 +82,17 @@ for obj := range huobiClient.Listen() {
 ### RESTFul
 ### Basic requests
 ```
-handler := rest.NewDefaultRestHandler()
+handler := rest.NewDefaultFutureRestHandler()
 tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-handler.GetFutureContractIndex(tickers)
+handler.SubscribeFutureMarketDepth(tickers, rest.STEP0)
 for index := range handler.Listen() {
     switch index.(type) {
-    case string:
-        fmt.Println(index.(string)) //错误信息打印为string
-    case *rest.IndexResponse:
-        ir := index.(*rest.IndexResponse)
-		fmt.Println(ir.Data[0].IndexPrice)
+    case *rest.DepthResponse:
+        ir := index.(*rest.DepthResponse)
+        fmt.Println(ir)
     case *rest.Error:
         jsonStr, _ := json.Marshal(index)
         fmt.Println(string(jsonStr))
-    default:
-        fmt.Println("other type of index")
     }
 }
 ```

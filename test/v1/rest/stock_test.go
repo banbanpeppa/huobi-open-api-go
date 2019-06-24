@@ -12,7 +12,7 @@ import (
 func TestStock(t *testing.T) {
 	handler := rest.NewDefaultStockRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	handler.GetStockTrade(tickers)
+	handler.SubscribeStockTrade(tickers)
 	for index := range handler.Listen() {
 		switch index.(type) {
 		case *rest.TradeResponse:
@@ -29,10 +29,10 @@ func TestStock(t *testing.T) {
 	}
 }
 
-func TestDepth(t *testing.T) {
+func TestSubscribeDepth(t *testing.T) {
 	handler := rest.NewDefaultStockRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	handler.GetStockDepth(tickers, 5, rest.STEP0)
+	handler.SubscribeStockDepth(tickers, 5, rest.STEP0)
 	for index := range handler.Listen() {
 		switch index.(type) {
 		case *rest.DepthResponse:
@@ -42,5 +42,29 @@ func TestDepth(t *testing.T) {
 			jsonStr, _ := json.Marshal(index)
 			fmt.Println(string(jsonStr))
 		}
+	}
+}
+
+func TestGetDepth(t *testing.T) {
+	handler := rest.NewDefaultStockRestHandler()
+	stockDepth, err := handler.GetStockDepth("BTC", rest.DEFAULT, rest.STEP0)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(stockDepth)
+	}
+}
+
+func TestGetDepths(t *testing.T) {
+	handler := rest.NewDefaultStockRestHandler()
+	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
+	depths, err := handler.GetStockDepths(tickers, rest.DEFAULT, rest.STEP0)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		for _, depth := range depths {
+			fmt.Println(depth)
+		}
+
 	}
 }
