@@ -64,7 +64,7 @@ func TestTrade(t *testing.T) {
 func TestSubscribeFutureDepth(t *testing.T) {
 	handler := rest.NewDefaultFutureRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	handler.SubscribeFutureMarketDepth(tickers, rest.STEP0)
+	handler.SubscribeFutureMarketDepth(tickers, rest.DEPTH_STEP0)
 	for index := range handler.Listen() {
 		switch index.(type) {
 		case *rest.DepthResponse:
@@ -79,7 +79,7 @@ func TestSubscribeFutureDepth(t *testing.T) {
 
 func TestGetFutureDepth(t *testing.T) {
 	handler := rest.NewDefaultFutureRestHandler()
-	depth, err := handler.GetFutureMarketDepth("BTC", rest.CW, rest.STEP0)
+	depth, err := handler.GetFutureMarketDepth("BTC", rest.CW, rest.DEPTH_STEP0)
 	if err != nil {
 		fmt.Println(err)
 	} else {

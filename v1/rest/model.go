@@ -18,24 +18,24 @@ type TradeResponse struct {
 	Ch     string `json:"ch"`
 }
 
-type DepthRequestType string
+type DepthStep string
 
 const (
-	STEP0 DepthRequestType = "step0"
-	STEP1 DepthRequestType = "step1"
-	STEP2 DepthRequestType = "step2"
-	STEP3 DepthRequestType = "step3"
-	STEP4 DepthRequestType = "step4"
-	STEP5 DepthRequestType = "step5"
+	DEPTH_STEP0 DepthStep = "step0"
+	DEPTH_STEP1 DepthStep = "step1"
+	DEPTH_STEP2 DepthStep = "step2"
+	DEPTH_STEP3 DepthStep = "step3"
+	DEPTH_STEP4 DepthStep = "step4"
+	DEPTH_STEP5 DepthStep = "step5"
 )
 
 type DepthRequestDepth int32
 
 const (
-	FIVE    DepthRequestDepth = 5
-	TEN     DepthRequestDepth = 10
-	TWENTY  DepthRequestDepth = 20
-	DEFAULT DepthRequestDepth = 150
+	DEPTH_FIVE    DepthRequestDepth = 5
+	DEPTH_TEN     DepthRequestDepth = 10
+	DEPTH_TWENTY  DepthRequestDepth = 20
+	DEPTH_DEFAULT DepthRequestDepth = 150
 )
 
 type FutureSymbolType string

@@ -32,7 +32,7 @@ func TestStock(t *testing.T) {
 func TestSubscribeDepth(t *testing.T) {
 	handler := rest.NewDefaultSpotRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	handler.SubscribeSpotDepth(tickers, 5, rest.STEP0)
+	handler.SubscribeSpotDepth(tickers, 5, rest.DEPTH_STEP0)
 	for index := range handler.Listen() {
 		switch index.(type) {
 		case *rest.DepthResponse:
@@ -47,7 +47,7 @@ func TestSubscribeDepth(t *testing.T) {
 
 func TestGetDepth(t *testing.T) {
 	handler := rest.NewDefaultSpotRestHandler()
-	stockDepth, err := handler.GetSpotDepth("BTC", rest.DEFAULT, rest.STEP0)
+	stockDepth, err := handler.GetSpotDepth("BTC", rest.DEPTH_DEFAULT, rest.DEPTH_STEP0)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -58,7 +58,7 @@ func TestGetDepth(t *testing.T) {
 func TestGetDepths(t *testing.T) {
 	handler := rest.NewDefaultSpotRestHandler()
 	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
-	depths, err := handler.GetSpotDepths(tickers, rest.DEFAULT, rest.STEP0)
+	depths, err := handler.GetSpotDepths(tickers, rest.DEPTH_DEFAULT, rest.DEPTH_STEP0)
 	if err != nil {
 		fmt.Println(err)
 	} else {

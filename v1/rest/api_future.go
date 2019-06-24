@@ -46,7 +46,7 @@ func (handler *Handler) SubscribeFutureMarketTrade(symbols []string) {
 	}()
 }
 
-func (handler *Handler) SubscribeFutureMarketDepth(symbols []string, depthType DepthRequestType) {
+func (handler *Handler) SubscribeFutureMarketDepth(symbols []string, depthType DepthStep) {
 	strRequest := "/market/depth"
 	suffixs := []string{"_CQ", "_CW", "_NW"}
 	go func() {
@@ -63,7 +63,7 @@ func (handler *Handler) SubscribeFutureMarketDepth(symbols []string, depthType D
 	}()
 }
 
-func (handler *Handler) GetFutureMarketDepth(symbol string, cycle FutureSymbolType, depthType DepthRequestType) (*DepthResponse, error) {
+func (handler *Handler) GetFutureMarketDepth(symbol string, cycle FutureSymbolType, depthType DepthStep) (*DepthResponse, error) {
 	strRequest := "/market/depth"
 	params := make(map[string]string)
 	params["symbol"] = symbol + string(cycle)

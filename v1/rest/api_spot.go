@@ -23,14 +23,14 @@ func (handler *Handler) SubscribeSpotTrade(symbols []string) {
 	}()
 }
 
-func (handler *Handler) SubscribeSpotDepth(symbols []string, depth DepthRequestDepth, depthType DepthRequestType) {
+func (handler *Handler) SubscribeSpotDepth(symbols []string, depth DepthRequestDepth, depthType DepthStep) {
 	strRequest := "/market/depth"
 	go func() {
 		for {
 			for _, symbol := range symbols {
 				params := make(map[string]string)
 				params["symbol"] = strings.ToLower(symbol) + "usdt"
-				if depth != DEFAULT {
+				if depth != DEPTH_DEFAULT {
 					params["depth"] = strconv.Itoa(int(depth))
 				}
 				params["type"] = string(depthType)
@@ -41,11 +41,11 @@ func (handler *Handler) SubscribeSpotDepth(symbols []string, depth DepthRequestD
 	}()
 }
 
-func (handler *Handler) GetSpotDepth(symbol string, depth DepthRequestDepth, depthType DepthRequestType) (*DepthResponse, error) {
+func (handler *Handler) GetSpotDepth(symbol string, depth DepthRequestDepth, depthType DepthStep) (*DepthResponse, error) {
 	strRequest := "/market/depth"
 	params := make(map[string]string)
 	params["symbol"] = strings.ToLower(symbol) + "usdt"
-	if depth != DEFAULT {
+	if depth != DEPTH_DEFAULT {
 		params["depth"] = strconv.Itoa(int(depth))
 	}
 	params["type"] = string(depthType)
@@ -72,7 +72,7 @@ func (handler *Handler) GetSpotDepth(symbol string, depth DepthRequestDepth, dep
 	}
 }
 
-func (handler *Handler) GetSpotDepths(symbols []string, depth DepthRequestDepth, depthType DepthRequestType) ([]*DepthResponse, error) {
+func (handler *Handler) GetSpotDepths(symbols []string, depth DepthRequestDepth, depthType DepthStep) ([]*DepthResponse, error) {
 	depths := make([]*DepthResponse, 0)
 	for _, symbol := range symbols {
 		depth, err := handler.GetSpotDepth(symbol, depth, depthType)
