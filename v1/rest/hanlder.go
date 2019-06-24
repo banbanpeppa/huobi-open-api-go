@@ -64,13 +64,21 @@ func (handler *Handler) processSymbol(params map[string]string, strRequest strin
 				} else {
 					handler.listener <- &indexRes
 				}
-			case StockResponse:
-				stockRes := StockResponse{}
+			case TradeResponse:
+				stockRes := TradeResponse{}
 				err = json.Unmarshal([]byte(responsej), &stockRes)
 				if err != nil {
 					handler.listener <- fmt.Sprint("json unmarshal err:", err)
 				} else {
 					handler.listener <- &stockRes
+				}
+			case DepthResponse:
+				depthRes := DepthResponse{}
+				err = json.Unmarshal([]byte(responsej), &depthRes)
+				if err != nil {
+					handler.listener <- fmt.Sprint("json unmarshal err:", err)
+				} else {
+					handler.listener <- &depthRes
 				}
 			default:
 				handler.listener <- []byte(responsej)

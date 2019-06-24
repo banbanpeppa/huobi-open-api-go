@@ -15,8 +15,15 @@ var (
 	REGEX_HUOBI_INDEX_PATTERN  = "index:HUOBI:([A-Z]+)"
 	REGEX_HUOBI_STOCK_PATTERN  = "stock:HUOBI:([A-Z]+)"
 	REGEX_HUOBI_PATTERN        = "(.*):HUOBI:(.*)"
-	REGEX_OKEX_PATTERN         = "(.*):OKEX:(.*)"
-	REGEX_BFX_PATTERN          = "(.*):BFX:(.*)"
+
+	REGEX_OKEX_FUTURE_PATTERN = "future:([a-z]+):OKEX:([A-Z]+)"
+	REGEX_OKEX_INDEX_PATTERN  = "index:OKEX:([A-Z]+)"
+	REGEX_OKEX_STOCK_PATTERN  = "stock:OKEX:([A-Z]+)"
+	REGEX_OKEX_PATTERN        = "(.*):OKEX:(.*)"
+
+	REGEX_BFX_PATTERN = "(.*):BFX:(.*)"
+
+	REGEX_ALL_PATTERN = "*"
 )
 
 func TestRedisKeys(t *testing.T) {
@@ -31,7 +38,7 @@ func TestRedisKeys(t *testing.T) {
 	for {
 		count := 0
 		for _, k := range keys {
-			match, _ := regexp.MatchString(REGEX_HUOBI_PATTERN, k)
+			match, _ := regexp.MatchString(REGEX_OKEX_INDEX_PATTERN, k)
 			if match {
 				response, err := redis.Get(k)
 				if err == nil {
@@ -47,7 +54,7 @@ func TestRedisKeys(t *testing.T) {
 			}
 
 		}
+		time.Sleep(500 * time.Millisecond)
 		fmt.Println("超时的数目：", count)
 	}
-
 }

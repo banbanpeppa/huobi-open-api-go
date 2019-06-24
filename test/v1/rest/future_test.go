@@ -60,3 +60,19 @@ func TestTrade(t *testing.T) {
 		}
 	}
 }
+
+func TestFutureDepth(t *testing.T) {
+	handler := rest.NewDefaultFutureRestHandler()
+	tickers := []string{"BTC", "ETH", "BCH", "EOS", "LTC", "ETC", "BSV", "XRP"}
+	handler.GetFutureMarketDepth(tickers, rest.STEP0)
+	for index := range handler.Listen() {
+		switch index.(type) {
+		case *rest.DepthResponse:
+			ir := index.(*rest.DepthResponse)
+			fmt.Println(ir)
+		case *rest.Error:
+			jsonStr, _ := json.Marshal(index)
+			fmt.Println(string(jsonStr))
+		}
+	}
+}
